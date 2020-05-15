@@ -17,5 +17,5 @@ jobs:
         env:
           INVITER_GITHUB_API_TOKEN: ${{ secrets.INVITER_GITHUB_API_TOKEN }}
         run: |
-          DEBUG=1 go run main.go -dry-run=true
+          DEBUG=0 go run main.go -dry-run=false
 

@@ -164,7 +164,7 @@ func debugJson(v interface{}) error {
 }
 
 func debug(log string, args ...interface{}) {
-	if os.Getenv("DEBUG") == "" {
+	if os.Getenv("DEBUG") != "1" {
 		return
 	}
 	fmt.Printf(log, args...)
