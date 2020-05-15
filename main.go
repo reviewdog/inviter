@@ -35,7 +35,7 @@ func main() {
 func run() error {
 	flag.Parse()
 	ctx := context.Background()
-	cli := githubClient(ctx, os.Getenv("GITHUB_API_TOKEN"))
+	cli := githubClient(ctx, os.Getenv("INVITER_GITHUB_API_TOKEN"))
 	iv := &inviter{cli: cli, pendings: make(map[string]bool)}
 	if err := iv.setupPendings(ctx, *targetOrg); err != nil {
 		return err
