@@ -45,7 +45,9 @@ func run() error {
 		return err
 	}
 	for _, repo := range repos {
-		iv.processRepo(ctx, repo)
+		if err := iv.processRepo(ctx, repo); err != nil {
+			return err
+		}
 	}
 	return nil
 }
