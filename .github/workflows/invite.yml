@@ -6,7 +6,7 @@ on:
     types: [invite]
 
 jobs:
-  reviewdog:
+  invite:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
