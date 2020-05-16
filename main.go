@@ -2,13 +2,16 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/google/go-github/v31/github"
@@ -130,16 +133,17 @@ func (iv *inviter) processPulls(ctx context.Context, owner, repo string, pull *g
 	if strings.HasPrefix(repo, "action-") {
 		teamSlug = *actionTeamSlug
 	}
-	if err := iv.invite(ctx, userName, owner, teamSlug, link); err != nil {
+	if err := iv.invite(ctx, userName, owner, teamSlug, repo, pull); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (iv *inviter) invite(ctx context.Context, user, org, teamSlug, pr string) error {
+func (iv *inviter) invite(ctx context.Context, user, org, teamSlug, repo string, pull *github.PullRequest) error {
+	prLink := pull.GetLinks().GetHTML().GetHRef()
 	if *dryRun {
 		fmt.Printf("[dry-run] Invite %q to https://github.com/orgs/%s/teams/%s based on %s\n",
-			user, org, teamSlug, pr)
+			user, org, teamSlug, prLink)
 		return nil
 	}
 	membership, _, err := iv.cli.Teams.AddTeamMembershipBySlug(
@@ -149,7 +153,15 @@ func (iv *inviter) invite(ctx context.Context, user, org, teamSlug, pr string) e
 	}
 	debugJson(membership)
 	fmt.Printf("[state=%s] Invite %q to https://github.com/orgs/%s/teams/%s based on %s\n",
-		membership.GetState(), user, org, teamSlug, pr)
+		membership.GetState(), user, org, teamSlug, prLink)
+
+	comment := &github.IssueComment{
+		Body: github.String(invitationMessage(user)),
+	}
+	if _, _, err := iv.cli.Issues.CreateComment(ctx, org, repo, pull.GetNumber(), comment); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -179,4 +191,27 @@ func githubClient(ctx context.Context, token string) *github.Client {
 	)
 	tc := oauth2.NewClient(ctx, ts)
 	return github.NewClient(tc)
+}
+
+var invitationMsgTemplate = template.Must(template.New("invite").Parse(
+	`Hi, @{{ .User }}! We merged your PR to reviewdog! 🐶
+Thank you for your contribution! ✨
+
+**We just invited you to join the @reviewdog organization on GitHub.**
+Accept the invite by visiting https://github.com/orgs/reviewdog/invitation.
+By joining the team, you'll be a part of reviewdog community and can help the maintainance of reviewdog.
+
+Thanks again!
+`,
+))
+
+func invitationMessage(user string) string {
+	var b bytes.Buffer
+	d := struct{ User string }{
+		User: user,
+	}
+	if err := invitationMsgTemplate.Execute(&b, d); err != nil {
+		log.Printf("[error] %v", err)
+	}
+	return b.String()
 }
