@@ -141,9 +141,11 @@ func (iv *inviter) processPulls(ctx context.Context, owner, repo string, pull *g
 
 func (iv *inviter) invite(ctx context.Context, user, org, teamSlug, repo string, pull *github.PullRequest) error {
 	prLink := pull.GetLinks().GetHTML().GetHRef()
+	inviteMsg := invitationMessage(user)
 	if *dryRun {
 		fmt.Printf("[dry-run] Invite %q to https://github.com/orgs/%s/teams/%s based on %s\n",
 			user, org, teamSlug, prLink)
+		fmt.Printf("[dry-run] Invitation message:\n%s", inviteMsg)
 		return nil
 	}
 	membership, _, err := iv.cli.Teams.AddTeamMembershipBySlug(
@@ -156,7 +158,7 @@ func (iv *inviter) invite(ctx context.Context, user, org, teamSlug, repo string,
 		membership.GetState(), user, org, teamSlug, prLink)
 
 	comment := &github.IssueComment{
-		Body: github.String(invitationMessage(user)),
+		Body: github.String(inviteMsg),
 	}
 	if _, _, err := iv.cli.Issues.CreateComment(ctx, org, repo, pull.GetNumber(), comment); err != nil {
 		return err
