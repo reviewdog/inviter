@@ -73,7 +73,13 @@ func (iv *inviter) setupPendings(ctx context.Context, org string) error {
 }
 
 func (iv *inviter) listRepos(ctx context.Context, org string) ([]*github.Repository, error) {
-	repos, _, err := iv.cli.Repositories.ListByOrg(ctx, org, &github.RepositoryListByOrgOptions{})
+	repos, _, err := iv.cli.Repositories.ListByOrg(ctx, org, &github.RepositoryListByOrgOptions{
+		Sort:      "updated",
+		Direction: "desc",
+		ListOptions: github.ListOptions{
+			PerPage: 100,
+		},
+	})
 	if err != nil {
 		return nil, err
 	}
