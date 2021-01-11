@@ -4,6 +4,7 @@ on:
     - cron:  '14 14 * * *' # Runs at 14:14 UTC every day
   repository_dispatch:
     types: [invite]
+  pull_request:
 
 jobs:
   invite:
@@ -17,5 +18,5 @@ jobs:
         env:
           INVITER_GITHUB_API_TOKEN: ${{ secrets.INVITER_GITHUB_API_TOKEN }}
         run: |
-          DEBUG=0 go run main.go -dry-run=false
+          DEBUG=0 go run main.go -dry-run=${{ github.event_name == 'pull_request' }}
 
