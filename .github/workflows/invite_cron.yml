@@ -1,0 +1,7 @@
+name: invite (cron)
+on:
+  schedule:
+    - cron:  '14 14 * * *' # Runs at 14:14 UTC every day
+jobs:
+  invite:
+    uses: ./.github/workflows/invite.yml

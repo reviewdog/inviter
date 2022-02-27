@@ -1,7 +1,6 @@
 name: invite
 on:
-  schedule:
-    - cron:  '14 14 * * *' # Runs at 14:14 UTC every day
+  workflow_call:
   repository_dispatch:
     types: [invite]
   workflow_dispatch:
