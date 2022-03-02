@@ -1,6 +1,10 @@
 name: invite
 on:
   workflow_call:
+    secrets:
+      INVITER_GITHUB_API_TOKEN:
+        description: GitHub API token
+        required: true
   repository_dispatch:
     types: [invite]
   workflow_dispatch:
