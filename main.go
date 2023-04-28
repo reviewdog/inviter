@@ -14,7 +14,7 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/google/go-github/v39/github"
+	"github.com/google/go-github/v52/github"
 	"golang.org/x/oauth2"
 )
 
@@ -116,7 +116,7 @@ func (iv *inviter) processPulls(ctx context.Context, owner, repo string, pull *g
 		debug("[Not merged] %v: %v\n", userName, link)
 		return nil
 	}
-	if closedAgo := time.Since(pull.GetClosedAt()); closedAgo > *within {
+	if closedAgo := time.Since(pull.GetClosedAt().Time); closedAgo > *within {
 		debug("[Skip too old (%v > %v)] %v: %v\n", closedAgo, *within, userName, link)
 		return nil
 	}
