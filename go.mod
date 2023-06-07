@@ -3,7 +3,6 @@ module github.com/reviewdog/inviter
 go 1.18
 
 require (
-	github.com/google/go-github/v52 v52.0.0
 	github.com/google/go-github/v53 v53.0.0
 	golang.org/x/oauth2 v0.8.0
 )
