@@ -10,8 +10,8 @@ jobs:
     name: runner / golangci-lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: reviewdog/action-golangci-lint@v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: reviewdog/action-golangci-lint@dd3fda91790ca90e75049e5c767509dc0ec7d99b # v2.7.0
         with:
           github_token: ${{ secrets.github_token }}
           level: "warning"
@@ -22,8 +22,8 @@ jobs:
     name: runner / staticcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: reviewdog/action-staticcheck@v1
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: reviewdog/action-staticcheck@1c65b3c729a6bbd0bd64d7a0a63b6db0212fcb08 # v1.26.0
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
