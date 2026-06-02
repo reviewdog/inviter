@@ -2,7 +2,7 @@ module github.com/reviewdog/inviter
 
 go 1.23.0
 
-toolchain go1.25.1
+toolchain go1.26.4
 
 require (
 	github.com/google/go-github/v58 v58.0.0
