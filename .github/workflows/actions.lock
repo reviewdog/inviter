@@ -5,7 +5,7 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/invite.yml':
         - 'actions/checkout@v7.0.0'
-        - 'actions/setup-go@v5.5.0'
+        - 'actions/setup-go@v5.6.0'
     '.github/workflows/invite_cron.yml': []
     '.github/workflows/reviewdog.yml':
         - 'actions/checkout@v7.0.0'
@@ -17,9 +17,9 @@ dependencies:
         commit: 'sha1-9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0'
         owner_id: 44036562
         repo_id: 197814629
-    'actions/setup-go@v5.5.0':
-        ref: 'v5.5.0'
-        commit: 'sha1-d35c59abb061a4a6fb18e82ac0862c26744d6ab5'
+    'actions/setup-go@v5.6.0':
+        ref: 'v5.6.0'
+        commit: 'sha1-40f1582b2485089dde7abd97c1529aa768e1baff'
         owner_id: 44036562
         repo_id: 192624594
     'reviewdog/action-golangci-lint@v2.7.1':
